@@ -1,5 +1,0 @@
-2025-04-13 21:16:08,132 - api.auth - INFO - Successfully connected to Azure DevOps. Found 1 projects.
-2025-04-13 21:16:08,815 - api.test_cases - INFO - Created Test Case #9: Login Test
-2025-04-13 21:16:09,159 - api.test_cases - INFO - Updated test steps for Test Case #9
-2025-04-13 21:16:09,597 - api.test_cases - INFO - Created Test Case #10: Logout Test
-2025-04-13 21:16:09,747 - api.test_cases - INFO - Updated test steps for Test Case #10

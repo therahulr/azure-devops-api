@@ -1,3 +1,0 @@
-2025-04-13 22:02:44,762 - api.auth - INFO - Successfully connected to Azure DevOps. Found 1 projects.
-2025-04-13 22:02:45,375 - api.test_cases - INFO - Created Test Case #18: User Registration - Email Verification Workflow
-2025-04-13 22:02:47,060 - api.test_cases - INFO - Updated test steps for Test Case #18
