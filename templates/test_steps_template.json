@@ -1,0 +1,18 @@
+[
+    {
+        "action": "Navigate to the login page",
+        "expected": "Login page is displayed with username and password fields"
+    },
+    {
+        "action": "Enter valid username and password",
+        "expected": "Credentials are accepted"
+    },
+    {
+        "action": "Click the login button",
+        "expected": "User is successfully logged in and redirected to the dashboard"
+    },
+    {
+        "action": "Verify dashboard elements",
+        "expected": "Dashboard shows user profile, navigation menu, and recent activities"
+    }
+]

@@ -1,0 +1,10 @@
+2025-04-13 21:45:15,021 - api.auth - INFO - Successfully connected to Azure DevOps. Found 1 projects.
+2025-04-13 21:45:18,894 - api.test_cases - INFO - Created Test Case #13: User Authentication - Complex Password Validation
+2025-04-13 21:45:23,739 - api.test_cases - INFO - Updated test steps for Test Case #13
+2025-04-13 21:45:25,306 - api.test_cases - ERROR - Failed to create test case: TF401347: Invalid tree name given for work item -1, field 'System.AreaPath'.
+2025-04-13 21:45:28,007 - api.test_cases - ERROR - Failed to create test case: TF401347: Invalid tree name given for work item -1, field 'System.AreaPath'.
+2025-04-13 21:46:30,149 - api.auth - INFO - Successfully connected to Azure DevOps. Found 1 projects.
+2025-04-13 21:46:31,221 - api.test_cases - INFO - Created Test Case #14: User Authentication - Complex Password Validation
+2025-04-13 21:46:34,080 - api.test_cases - INFO - Updated test steps for Test Case #14
+2025-04-13 21:46:34,877 - api.test_cases - ERROR - Failed to create test case: TF401347: Invalid tree name given for work item -1, field 'System.AreaPath'.
+2025-04-13 21:46:35,917 - api.test_cases - ERROR - Failed to create test case: TF401347: Invalid tree name given for work item -1, field 'System.AreaPath'.

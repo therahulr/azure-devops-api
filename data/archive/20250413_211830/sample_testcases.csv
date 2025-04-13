@@ -1,0 +1,3 @@
+Type,Title,Description,StepAction1,StepExpected1,StepAction2,StepExpected2,StepAction3,StepExpected3
+Test Case,Login Test,Verify login functionality works as expected,Navigate to the login page,Login page is displayed with username and password fields,Enter valid username and password,Credentials are accepted,Click the login button,User is successfully logged in and redirected to the dashboard
+Test Case,Logout Test,Verify logout functionality works correctly,Ensure user is logged in,User is logged in and on the dashboard,Click the logout button in the user menu,User is logged out and redirected to the login page,,

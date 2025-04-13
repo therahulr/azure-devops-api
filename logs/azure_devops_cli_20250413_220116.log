@@ -1,0 +1,8 @@
+2025-04-13 22:01:45,982 - api.auth - INFO - Successfully connected to Azure DevOps. Found 1 projects.
+2025-04-13 22:01:46,901 - api.test_cases - INFO - Created Test Case #16: User Registration - Email Verification Workflow
+2025-04-13 22:01:46,902 - api.test_cases - ERROR - Failed to update test steps for test case #16: name 'build_test_steps_xml' is not defined
+2025-04-13 22:01:46,902 - api.test_cases - ERROR - Failed to create test case: name 'build_test_steps_xml' is not defined
+2025-04-13 22:02:31,630 - api.auth - INFO - Successfully connected to Azure DevOps. Found 1 projects.
+2025-04-13 22:02:32,563 - api.test_cases - INFO - Created Test Case #17: User Registration - Email Verification Workflow
+2025-04-13 22:02:32,564 - api.test_cases - ERROR - Failed to update test steps for test case #17: name 'build_test_steps_xml' is not defined
+2025-04-13 22:02:32,564 - api.test_cases - ERROR - Failed to create test case: name 'build_test_steps_xml' is not defined

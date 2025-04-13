@@ -1,0 +1,9 @@
+{
+    "System.Title": "Sample Work Item Title",
+    "System.Description": "This is a description of the work item.",
+    "System.AssignedTo": "user@example.com",
+    "System.AreaPath": "YourProject\\Area",
+    "System.IterationPath": "YourProject\\Iteration 1",
+    "Microsoft.VSTS.Common.Priority": 2,
+    "System.Tags": "Tag1; Tag2"
+}
