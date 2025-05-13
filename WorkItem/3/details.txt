@@ -1,0 +1,25 @@
+Work Item ID: 3
+Work Item Type: User Story
+Title: Implement login functionality
+State: New
+Area Path: Inficore
+Iteration Path: Inficore
+Created Date: 2025-04-11 16:14:46
+Created By: Rahul Raj
+Last Modified Date: 2025-04-11 16:24:05
+Last Modified By: Rahul Raj
+
+
+Description:
+As a user, I want to log in to the system
+
+
+
+Acceptance Criteria:
+N/A
+
+Value Area: Business
+
+All Fields:
+WEF_9E3E42187E0146EAAFC7E762D4E38E75_Kanban.Column: To Do
+WEF_9E3E42187E0146EAAFC7E762D4E38E75_Kanban.Column.Done: False

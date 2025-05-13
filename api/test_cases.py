@@ -355,3 +355,44 @@ class TestCaseClient:
         except Exception as e:
             logger.error(f"Failed to add test case #{test_case_id} to suite: {str(e)}")
             raise
+
+    def link_test_cases_to_parent(self, parent_id, test_case_ids):
+        """
+        Link multiple test cases to a parent work item (e.g., User Story) using 'Tested By' relation.
+
+        Args:
+            parent_id (int): ID of the parent work item.
+            test_case_ids (list): List of test case IDs to be linked.
+
+        Returns:
+            WorkItem: The updated parent work item
+        """
+        try:
+            document = []
+            for test_case_id in test_case_ids:
+                test_case_url = f"{self.org_url}/{self.project}/_apis/wit/workItems/{test_case_id}"
+                document.append(
+                    JsonPatchOperation(
+                        op="add",
+                        path="/relations/-",
+                        value={
+                            "rel": "Microsoft.VSTS.Common.TestedBy-Forward",
+                            "url": test_case_url,
+                            "attributes": {
+                                "comment": f"Linked test case {test_case_id} to parent {parent_id}"
+                            }
+                        }
+                    )
+                )
+
+            updated_work_item = self.wit_client.update_work_item(
+                document=document,
+                id=parent_id
+            )
+
+            logger.info(f"Linked test cases {test_case_ids} to parent work item #{parent_id}")
+            return updated_work_item
+
+        except Exception as e:
+            logger.error(f"Failed to link test cases to parent work item #{parent_id}: {str(e)}")
+            raise

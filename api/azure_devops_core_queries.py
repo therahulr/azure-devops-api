@@ -31,7 +31,9 @@ class AzureDevOpsCoreQueries:
         self.core_client = connection.clients.get_core_client()
         
         logger.info(f"Initialized Azure DevOps Core Queries for project: {project}")
-    
+
+    # 1st function - Get all work item types
+
     def get_work_item_types(self):
         """
         Get all work item types defined in the project.
@@ -57,90 +59,89 @@ class AzureDevOpsCoreQueries:
         except Exception as e:
             logger.error(f"Failed to get work item types: {str(e)}")
             raise
-    
-    def get_area_paths(self):
+
+
+    # 2nd function - Get all area paths
+    def list_all_area_paths(self):
         """
-        Get all area paths defined in the project.
-        
-        Returns:
-            dict: Dictionary containing area paths structure
+        Recursively print all area paths defined in the project.
         """
         try:
-            # Get the area paths (corrected parameter name)
-            area_paths = self.wit_client.get_classification_nodes(
-                project=self.project, 
-                depth=20,
-                classification_node_type='areas'  # Changed from structure_type to classification_node_type
+            # Retrieve the root node for area classifications
+            root = self.wit_client.get_classification_node(
+                project=self.project,
+                structure_group='areas',
+                path='',
+                depth=20
             )
-            
-            # Process the result for easier consumption
-            def process_node(node):
-                result = {
-                    'name': node.name,
-                    'path': node.path,
-                    'id': node.id
-                }
-                
+
+            area_paths = []
+
+            def traverse(node, path):
+                full_path = f"{path}\\{node.name}" if path else node.name
+                area_paths.append(full_path)
                 if hasattr(node, 'children') and node.children:
-                    result['children'] = [process_node(child) for child in node.children]
-                else:
-                    result['children'] = []
-                
-                return result
-            
-            processed_areas = process_node(area_paths)
-            
-            logger.info(f"Retrieved area paths from project {self.project}")
-            return processed_areas
+                    for child in node.children:
+                        traverse(child, full_path)
+
+            traverse(root, "")
+            print("\nAvailable Area Paths:")
+            for path in area_paths:
+                print(f"- {path}")
+            return area_paths
         except Exception as e:
-            logger.error(f"Failed to get area paths: {str(e)}")
+            logger.error(f"Failed to fetch area paths: {str(e)}")
             raise
-    
+
+    # 3rd function - Get all iteration paths
     def get_iteration_paths(self):
         """
         Get all iteration paths (sprints) defined in the project.
-        
+
         Returns:
             dict: Dictionary containing iteration paths structure
         """
         try:
-            # Get the iteration paths (corrected parameter name)
-            iteration_paths = self.wit_client.get_classification_nodes(
-                project=self.project, 
-                depth=20,
-                classification_node_type='iterations'  # Changed from structure_type to classification_node_type
+            # Correct usage: get the root node of the iterations structure
+            root = self.wit_client.get_classification_node(
+                project=self.project,
+                structure_group='iterations',
+                path='',
+                depth=20
             )
-            
-            # Process the result for easier consumption
-            def process_node(node):
+
+            def process_node(node, parent_path=""):
+                current_path = f"{parent_path}\\{node.name}" if parent_path else node.name
                 result = {
                     'name': node.name,
-                    'path': node.path,
+                    'path': current_path,
                     'id': node.id
                 }
-                
-                # Add dates if available
+
+                # Extract start/finish dates if available
                 if hasattr(node, 'attributes') and node.attributes:
-                    if hasattr(node.attributes, 'start_date'):
-                        result['start_date'] = node.attributes.start_date
-                    if hasattr(node.attributes, 'finish_date'):
-                        result['finish_date'] = node.attributes.finish_date
-                
+                    if 'startDate' in node.attributes:
+                        result['start_date'] = node.attributes['startDate']
+                    if 'finishDate' in node.attributes:
+                        result['finish_date'] = node.attributes['finishDate']
+
+                # Recursively process children
                 if hasattr(node, 'children') and node.children:
-                    result['children'] = [process_node(child) for child in node.children]
+                    result['children'] = [process_node(child, current_path) for child in node.children]
                 else:
                     result['children'] = []
-                
+
                 return result
-            
-            processed_iterations = process_node(iteration_paths)
-            
+
+            processed_iterations = process_node(root)
             logger.info(f"Retrieved iteration paths from project {self.project}")
             return processed_iterations
+
         except Exception as e:
             logger.error(f"Failed to get iteration paths: {str(e)}")
             raise
-    
+
+    # 4th function - Get work item details
     def get_work_item(self, work_item_id, expand="All"):
         """
         Get details of a specific work item.
@@ -185,7 +186,8 @@ class AzureDevOpsCoreQueries:
         except Exception as e:
             logger.error(f"Failed to get work item #{work_item_id}: {str(e)}")
             raise
-    
+
+    # 5th function - Get multiple work items
     def get_work_items(self, work_item_ids, expand="All"):
         """
         Get details of multiple work items in a batch request.
@@ -328,3 +330,23 @@ class AzureDevOpsCoreQueries:
         except Exception as e:
             logger.error(f"Failed to get field definitions: {str(e)}")
             raise
+
+# if __name__ == "__main__":
+#     from api.auth import get_connection
+#     from config.settings import AZURE_DEVOPS_PROJECT
+#     obj = AzureDevOpsCoreQueries(connection=get_connection(), project=AZURE_DEVOPS_PROJECT)
+
+    # work_item_types = obj.get_work_item_types()
+    # print("Work Item Types:")
+    # for wit in work_item_types:
+    #     print(f"- {wit['name']} ({wit['reference_name']})")
+
+    # get_iteration_paths = obj.get_iteration_paths()
+    # print(f"Iteration Paths: {get_iteration_paths}")
+
+    # get_work_item = obj.get_work_item(3)
+    # print(f"Work Item: {get_work_item}")
+
+    # field_definitions = obj.get_field_definitions()
+    # print("Field Definitions:")
+

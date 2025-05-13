@@ -74,9 +74,10 @@ def print_menu():
     print_info(f"Project: {AZURE_DEVOPS_PROJECT}")
     print("\nSelect a module to work with:")
     print("  1. Test Case Management")
-    print("  2. Work Item Management (Coming Soon)")
-    print("  3. Exit")
-    return input("\nEnter your choice (1-3): ")
+    print("  2. Work Item Management")
+    print("  3. Bug/Defect Management")
+    print("  4. Exit")
+    return input("\nEnter your choice (1-4): ")
 
 
 def launch_test_case_cli():
@@ -92,8 +93,51 @@ def launch_test_case_cli():
         logger.error(f"Error in Test Case CLI: {str(e)}", exc_info=True)
 
 
+def launch_work_item_cli():
+    """Launch the Work Item CLI module."""
+    try:
+        from cli.work_item_cli import main as work_item_main
+        work_item_main()
+    except ImportError:
+        print_error("Work Item CLI module not found.")
+        logger.error("Failed to import cli.work_item_cli module.", exc_info=True)
+    except Exception as e:
+        print_error(f"Error in Work Item CLI: {str(e)}")
+        logger.error(f"Error in Work Item CLI: {str(e)}", exc_info=True)
+
+
+def launch_bug_defect_cli():
+    """Launch the Bug/Defect CLI module."""
+    try:
+        from cli.bug_defect_cli import main as bug_defect_main
+        bug_defect_main()
+    except ImportError:
+        print_error("Bug/Defect CLI module not found.")
+        logger.error("Failed to import cli.bug_defect_cli module.", exc_info=True)
+    except Exception as e:
+        print_error(f"Error in Bug/Defect CLI: {str(e)}")
+        logger.error(f"Error in Bug/Defect CLI: {str(e)}", exc_info=True)
+
+
 def main():
     """Main entry point for the Azure DevOps CLI router."""
+    # Ensure necessary directories exist
+    work_item_dir = Path(__file__).parent / 'WorkItem'
+    work_item_dir.mkdir(exist_ok=True)
+
+    # Create data directories for bug/defect management
+    data_dir = Path(__file__).parent / 'data'
+    data_dir.mkdir(exist_ok=True)
+
+    bug_defect_dir = data_dir / 'bug_defects'
+    bug_defect_dir.mkdir(exist_ok=True)
+
+    archive_dir = data_dir / 'archive'
+    archive_dir.mkdir(exist_ok=True)
+
+    bug_defect_archive_dir = archive_dir / 'bug_defects'
+    bug_defect_archive_dir.mkdir(exist_ok=True)
+
     while True:
         choice = print_menu()
 
@@ -101,10 +145,12 @@ def main():
             launch_test_case_cli()
 
         elif choice == '2':
-            print_warning("Work Item Management module is coming soon.")
-            input("\nPress Enter to continue...")
+            launch_work_item_cli()
 
         elif choice == '3':
+            launch_bug_defect_cli()
+
+        elif choice == '4':
             print_info("Exiting Azure DevOps CLI.")
             break
 

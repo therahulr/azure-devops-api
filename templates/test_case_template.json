@@ -1,0 +1,26 @@
+[
+  {
+    "type": "Test Case",
+    "title": "User Registration - Email Verification Workflow",
+    "description": "<div><p><strong>Test Objective:</strong> Validate the end-to-end user registration flow including email verification to ensure secure account creation.</p><p><strong>Test Environment:</strong> Staging environment with SMTP email server enabled for testing.</p><p><strong>Pre-requisites:</strong></p><ul><li>SMTP email service is running and accessible</li><li>Browser cache and cookies cleared</li><li>Test email address is accessible</li></ul><p><strong>Expected Security:</strong> Email verification token should expire after 24 hours and be single-use only.</p></div>",
+    "automation_status": "Not Automated",
+    "test_steps": [
+      {
+        "action": "Navigate to the application homepage",
+        "expected": "Homepage loads with a visible 'Register' link"
+      },
+      {
+        "action": "Click the 'Register' link",
+        "expected": "User is redirected to the registration page"
+      },
+      {
+        "action": "Enter valid user details (name, email, password) and submit the form",
+        "expected": "Verification email is sent and confirmation message is shown"
+      }
+    ],
+    "additional_fields": {
+      "Microsoft.VSTS.Common.Priority": 1,
+      "System.Tags": "Registration; Email Verification; User Signup; Security"
+    }
+  }
+]

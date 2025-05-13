@@ -90,9 +90,9 @@ def print_menu():
     print("\nOptions:")
     print("  1. List available test case files")
     print("  2. Process test case files")
-    print("  3. Return to main menu")
-    return input("\nEnter your choice (1-3): ")
-
+    print("  3. Link test cases to parent work item")
+    print("  4. Return to main menu")
+    return input("\nEnter your choice (1-4): ")
 
 def list_testcase_files():
     """List all test case files in the data/testcase directory."""
@@ -162,6 +162,46 @@ def select_files(files):
             return []
     else:
         return []
+
+
+def link_test_cases():
+    """Link test cases to a parent work item."""
+    print_title("Link Test Cases to Parent Work Item")
+
+    # Initialize TestCaseClient
+    client = TestCaseClient()
+
+    # Get parent work item ID
+    try:
+        parent_id = int(input("Enter parent work item ID (e.g., User Story): "))
+    except ValueError:
+        print_error("Invalid ID. Please enter a number.")
+        return
+
+    # Get test case IDs
+    try:
+        test_case_ids_input = input("Enter test case IDs (comma-separated): ")
+        test_case_ids = [int(id.strip()) for id in test_case_ids_input.split(',') if id.strip()]
+
+        if not test_case_ids:
+            print_warning("No valid test case IDs provided.")
+            return
+
+        print_info(f"Linking {len(test_case_ids)} test cases to parent work item #{parent_id}...")
+
+        # Confirm
+        confirm = input("Type 'YES' to confirm: ").upper()
+        if confirm != 'YES':
+            print_info("Operation cancelled.")
+            return
+
+        # Link test cases
+        updated_work_item = client.link_test_cases_to_parent(parent_id, test_case_ids)
+
+        print_success(f"Successfully linked test cases to parent work item #{parent_id}")
+
+    except Exception as e:
+        print_error(f"Error linking test cases: {str(e)}")
 
 
 def check_if_testcase_exists(client, title):
@@ -464,6 +504,9 @@ def process_files(files):
     total_created = 0
     total_skipped = 0
     total_errors = 0
+    
+    # Track successfully processed files
+    successfully_processed = []
 
     for file in files:
         print_title(f"Processing {file.name}")
@@ -492,16 +535,10 @@ def process_files(files):
         print_success(f"Created: {len(created)}")
         print_warning(f"Skipped (already exist): {len(skipped)}")
         print_error(f"Errors: {len(errors)}")
-
-        # Ask user if they want to archive the file
+        
+        # Add to successfully processed list if any test cases were created
         if len(created) > 0:
-            print_info("\nDo you want to archive this file now?")
-            archive = input("Type 'YES' to archive, or any other key to keep: ").upper()
-
-            if archive == 'YES':
-                archive_file(file)
-            else:
-                print_info(f"File {file.name} kept in the testcase directory.")
+            successfully_processed.append(file)
 
     # Print overall summary
     print_title("Overall Summary")
@@ -509,6 +546,18 @@ def process_files(files):
     print_success(f"Total test cases created: {total_created}")
     print_warning(f"Total test cases skipped: {total_skipped}")
     print_error(f"Total errors: {total_errors}")
+    
+    # Ask about archiving all successfully processed files AFTER the loop
+    if successfully_processed:
+        print_info(f"\nDo you want to archive all {len(successfully_processed)} successfully processed files now?")
+        archive = input("Type 'YES' to archive, or any other key to keep: ").upper()
+
+        if archive == 'YES':
+            for file in successfully_processed:
+                archive_file(file)
+            print_success(f"Archived {len(successfully_processed)} files.")
+        else:
+            print_info("Files kept in the testcase directory.")
 
 
 def main():
@@ -533,6 +582,10 @@ def main():
             input("\nPress Enter to continue...")
 
         elif choice == '3':
+            link_test_cases()
+            input("\nPress Enter to continue...")
+
+        elif choice == '4':
             print_info("Returning to main menu.")
             break
 
